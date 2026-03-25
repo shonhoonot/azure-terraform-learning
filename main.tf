@@ -21,7 +21,7 @@ provider "azurerm" {
 
 module "rg" {
   source   = "./modules/resource_group"
-  name     = var.resource_group_name
+  name     = "${var.resource_group_name}-${terraform.workspace}"
   location = var.location
 }
 

@@ -9,3 +9,7 @@ variable "location" {
 variable "storage_name" {
   default = "tfstorage2026bmt"
 }
+
+variable "environment" {
+  default = "dev"
+}
