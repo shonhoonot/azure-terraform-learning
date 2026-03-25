@@ -5,30 +5,22 @@ terraform {
       version = "~> 3.0"
     }
   }
-
-backend "azurerm" {
-  subscription_id      = "702e2323-a444-4093-8f18-ca43576dea38"
-  resource_group_name  = "tfstate-rg"
-  storage_account_name = "tfstate2026x"
-  container_name       = "tfstate"
-  key                  = "terraform.tfstate"
-	}
+  backend "azurerm" {
+    subscription_id      = "702e2323-a444-4093-8f18-ca43576dea38"
+    resource_group_name  = "tfstate-rg"
+    storage_account_name = "tfstate2026x"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
   features {}
 }
 
-module "rg" {
-  source   = "./modules/resource_group"
-  name     = "${var.resource_group_name}-${terraform.workspace}"
-  location = var.location
-}
-
-resource "azurerm_storage_account" "main" {
-  name                     = var.storage_name
-  resource_group_name      = module.rg.name
-  location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+# for_each ашиглан dev, staging, prod үүсгэх
+resource "azurerm_resource_group" "main" {
+  for_each = toset(["dev", "staging", "prod"])
+  name     = "rg-${each.key}"
+  location = "japaneast"
 }
